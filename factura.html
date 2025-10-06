@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Factura - Analgésicos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .cliente {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+        .total {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: right;
+            color: #28a745;
+        }
+        .btn-volver {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn-volver:hover {
+            background: #0056b3;
+        }
+        .imprimir {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Factura de Compra</h1>
+        
+        <div id="cliente" class="cliente"></div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody id="items"></tbody>
+        </table>
+        
+        <div id="total" class="total"></div>
+        
+        <button class="btn-volver" onclick="window.location.href='index.html'">Volver a la Tienda</button>
+        
+        <div class="imprimir">
+            <p>Para imprimir o compartir: Usa Ctrl+P (o Cmd+P en Mac) y selecciona "Guardar como PDF".</p>
+        </div>
+    </div>
+
+    <script>
+        const datosCompra = JSON.parse(localStorage.getItem('compra'));
+        if (!datosCompra) {
+            alert('No hay datos de compra. Redirigiendo a la tienda.');
+            window.location.href = 'index.html';
+        } else {
+            document.getElementById('cliente').innerHTML = `<strong>Cliente:</strong> ${datosCompra.cliente}`;
+
+            let total = 0;
+            let htmlItems = '';
+            datosCompra.items.forEach(item => {
+                const subtotal = item.precio * item.cantidad;
+                total += subtotal;
+                htmlItems += `
+                    <tr>
+                        <td>${item.nombre}</td>
+                        <td>${item.cantidad}</td>
+                        <td>$${item.precio.toLocaleString()}</td>
+                        <td>$${subtotal.toLocaleString()}</td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('items').innerHTML = htmlItems;
+            document.getElementById('total').innerHTML = `Total: $${total.toLocaleString()}`;
+
+            // Opcional: limpiar localStorage para evitar reutilizar datos viejos
+            localStorage.removeItem('compra');
+        }
+    </script>
+</body>
+</html>
