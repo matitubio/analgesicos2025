@@ -363,6 +363,95 @@
         // Escuchar cambios en el input de búsqueda
         document.getElementById('buscador').addEventListener('input', filtrarProductos);
 
+        // ---------- botón "X" para limpiar búsqueda (robusto y autocontenible) ----------
+(function() {
+  // Asegurarnos de que el DOM esté listo (por si se pega antes)
+  function setupClearButton() {
+    const input = document.getElementById('buscador');
+    if (!input) return; // seguridad
+
+    // Buscar un clear existente, si no existe lo creamos
+    let clear = document.getElementById('clearSearch');
+    if (!clear) {
+      clear = document.createElement('span');
+      clear.id = 'clearSearch';
+      clear.textContent = '×';
+      // estilos inline para no tocar CSS global (puedes mover a tu CSS si querés)
+      Object.assign(clear.style, {
+        position: 'absolute',
+        right: '8px',
+        top: '50%',
+        transform: 'translateY(-50%)',
+        cursor: 'pointer',
+        fontWeight: '700',
+        color: '#666',
+        fontSize: '18px',
+        display: 'none',
+        userSelect: 'none',
+        zIndex: 5,
+        padding: '2px'
+      });
+
+      // Aseguramos que el input esté dentro de un contenedor pos:relative
+      const wrapper = document.createElement('div');
+      wrapper.style.position = 'relative';
+      wrapper.style.width = input.style.width || '100%';
+
+      // Reemplazamos input por wrapper -> wrapper contiene input y clear
+      input.parentNode.insertBefore(wrapper, input);
+      wrapper.appendChild(input);    // lo mueve dentro del wrapper
+      wrapper.appendChild(clear);    // agrega la X al lado
+    } else {
+      // Si existe, asegurarnos que esté dentro del mismo parent que el input
+      const parent = input.parentElement;
+      if (clear.parentElement !== parent) {
+        // mover clear junto al input dentro de un wrapper si hace falta
+        const wrapper = document.createElement('div');
+        wrapper.style.position = 'relative';
+        wrapper.style.width = input.style.width || '100%';
+        parent.insertBefore(wrapper, input);
+        wrapper.appendChild(input);
+        wrapper.appendChild(clear);
+      }
+    }
+
+    // Mostrar/ocultar la X según el contenido del input
+    function toggleClear() {
+      clear.style.display = input.value && input.value.trim().length > 0 ? 'block' : 'none';
+    }
+
+    // Conectamos con tu función de filtrado ya existente
+    // (la linea que ya pusiste: document.getElementById('buscador').addEventListener('input', filtrarProductos); )
+    // Pero también queremos controlar la X visualmente.
+    input.addEventListener('input', toggleClear);
+
+    // Al hacer click en la X: limpiar, volver a filtrar y enfocar
+    clear.addEventListener('click', function(e) {
+      e.preventDefault();
+      input.value = '';
+      toggleClear();
+      // Llamamos a la función de filtrado directamente para restaurar la lista
+      if (typeof filtrarProductos === 'function') {
+        filtrarProductos();
+      } else {
+        // Fallback: disparar evento input
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+      input.focus();
+    });
+
+    // Inicializar visibilidad al cargar
+    toggleClear();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupClearButton);
+  } else {
+    setupClearButton();
+  }
+})();
+
+
         // Función para generar factura (adaptada para productos dinámicos)
         function generarFactura() {
             const nombreCliente = document.getElementById('cliente').value.trim();
