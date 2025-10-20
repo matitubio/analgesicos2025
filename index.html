@@ -521,7 +521,7 @@ document.getElementById('descargarPDF').addEventListener('click', () => {
     const doc = new jsPDF();
 
     // Título
-    doc.setFontSize(16);
+    doc.setFontSize(20);
     doc.text('Lista de Precios', 14, 20);
 
     // Fecha actual
@@ -531,7 +531,7 @@ document.getElementById('descargarPDF').addEventListener('click', () => {
 
     // Encabezados de tabla
     const startY = 30;
-    doc.setFontSize(12);
+    doc.setFontSize(15);
     doc.text('Producto', 14, startY);
     doc.text('Precio ($)', 160, startY, { align: 'right' });
 
@@ -540,7 +540,7 @@ document.getElementById('descargarPDF').addEventListener('click', () => {
 
     // Dibujar filas tipo tabla
     let y = startY + 10;
-    doc.setFontSize(11);
+    doc.setFontSize(14);
     productos.forEach((p, i) => {
         doc.text(p.nombre, 14, y);
         doc.text(p.precio.toString(), 160, y, { align: 'right' });
