@@ -396,6 +396,54 @@
                 `;
                 container.innerHTML += cardHTML;
             });
+             // Card para producto personalizado
+            const cardPersonalizado = `
+                <div class="card" id="card-personalizado">
+                    <h3>Producto personalizado</h3>
+
+                    <input
+                        type="text"
+                        id="productoPersonalizadoNombre"
+                        placeholder="Nombre del producto"
+                        style="width:100%; padding:8px; border:1px solid #ddd; border-radius:5px; font-size:14px; margin-bottom:8px;"
+                    >
+
+                    <input
+                        type="number"
+                        id="productoPersonalizadoPrecio"
+                        placeholder="Precio"
+                        min="0"
+                        style="width:100%; padding:8px; border:1px solid #ddd; border-radius:5px; font-size:14px; margin-bottom:8px;"
+                    >
+
+                    <select id="cantidad-producto-personalizado">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="20">20</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="30">30</option>
+                    </select>
+                </div>
+            `;
+
+            container.innerHTML += cardPersonalizado;
+        
         }
 
         // Llamar a generarCards al cargar la página
@@ -535,6 +583,36 @@
                     }
                 }
             });
+
+             // Agregar producto personalizado si fue completado
+            const nombrePersonalizado = document.getElementById('productoPersonalizadoNombre').value.trim();
+            const precioPersonalizado = document.getElementById('productoPersonalizadoPrecio').value;
+            const cantidadPersonalizada = parseInt(document.getElementById('cantidad-producto-personalizado').value);
+
+            const hayDatosPersonalizados =
+                nombrePersonalizado !== '' ||
+                precioPersonalizado !== '' ||
+                cantidadPersonalizada > 0;
+
+            if (hayDatosPersonalizados) {
+                if (
+                    nombrePersonalizado === '' ||
+                    precioPersonalizado === '' ||
+                    isNaN(parseFloat(precioPersonalizado)) ||
+                    parseFloat(precioPersonalizado) < 0 ||
+                    cantidadPersonalizada <= 0
+                ) {
+                    alert('Complete nombre, precio y cantidad del producto personalizado.');
+                    return;
+                }
+
+                compra.push({
+                    id: 'producto-personalizado',
+                    nombre: nombrePersonalizado,
+                    precio: parseFloat(precioPersonalizado),
+                    cantidad: cantidadPersonalizada
+                });
+            }
 
             if (compra.length === 0) {
                 alert('Por favor, seleccione al menos un producto.');
