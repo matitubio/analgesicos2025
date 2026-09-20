@@ -355,6 +355,7 @@
             return nombre.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
         }
 
+        let contadorPersonalizados = 0;
         // Generar cards dinámicamente al cargar la página
         function generarCards() {
             const container = document.getElementById('productos-container');
@@ -396,53 +397,84 @@
                 `;
                 container.innerHTML += cardHTML;
             });
-             // Card para producto personalizado
-            const cardPersonalizado = `
-                <div class="card" id="card-personalizado">
-                    <h3>Producto personalizado</h3>
+             // Cards para productos personalizados
 
-                    <input
-                        type="text"
-                        id="productoPersonalizadoNombre"
-                        placeholder="Nombre del producto"
-                        style="width:100%; padding:8px; border:1px solid #ddd; border-radius:5px; font-size:14px; margin-bottom:8px;"
-                    >
+function agregarProductoPersonalizado() {
+    contadorPersonalizados++;
 
-                    <input
-                        type="number"
-                        id="productoPersonalizadoPrecio"
-                        placeholder="Precio"
-                        min="0"
-                        style="width:100%; padding:8px; border:1px solid #ddd; border-radius:5px; font-size:14px; margin-bottom:8px;"
-                    >
+    const numero = contadorPersonalizados;
 
-                    <select id="cantidad-producto-personalizado">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="20">20</option>
-                        <option value="24">24</option>
-                        <option value="25">25</option>
-                        <option value="30">30</option>
-                    </select>
-                </div>
-            `;
+    const cardPersonalizado = `
+        <div class="card card-personalizado" id="card-personalizado-${numero}">
+            <h3>Producto personalizado ${numero}</h3>
 
-            container.innerHTML += cardPersonalizado;
+            <input
+                type="text"
+                id="productoPersonalizadoNombre-${numero}"
+                placeholder="Nombre del producto"
+                style="width:100%; padding:8px; border:1px solid #ddd; border-radius:5px; font-size:14px; margin-bottom:8px;"
+            >
+
+            <input
+                type="number"
+                id="productoPersonalizadoPrecio-${numero}"
+                placeholder="Precio"
+                min="0"
+                style="width:100%; padding:8px; border:1px solid #ddd; border-radius:5px; font-size:14px; margin-bottom:8px;"
+            >
+
+            <select id="cantidad-producto-personalizado-${numero}">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="20">20</option>
+                <option value="24">24</option>
+                <option value="25">25</option>
+                <option value="30">30</option>
+            </select>
+        </div>
+    `;
+
+    document.getElementById('productos-container').insertAdjacentHTML('beforeend', cardPersonalizado);
+}
+
+// Crear la primera card personalizada
+agregarProductoPersonalizado();
+
+// Botón para agregar otra
+const botonAgregar = document.createElement('button');
+botonAgregar.type = 'button';
+botonAgregar.textContent = '＋ Agregar otro producto';
+botonAgregar.style.cssText = `
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 15px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+`;
+
+botonAgregar.addEventListener('click', agregarProductoPersonalizado);
+
+document.getElementById('productos-container').appendChild(botonAgregar);
         
         }
 
@@ -584,34 +616,36 @@
                 }
             });
 
-             // Agregar producto personalizado si fue completado
-            const nombrePersonalizado = document.getElementById('productoPersonalizadoNombre').value.trim();
-            const precioPersonalizado = document.getElementById('productoPersonalizadoPrecio').value;
-            const cantidadPersonalizada = parseInt(document.getElementById('cantidad-producto-personalizado').value);
+              // Agregar todos los productos personalizados
+            for (let i = 1; i <= contadorPersonalizados; i++) {
+                const nombrePersonalizado = document.getElementById(`productoPersonalizadoNombre-${i}`).value.trim();
+                const precioPersonalizado = document.getElementById(`productoPersonalizadoPrecio-${i}`).value;
+                const cantidadPersonalizada = parseInt(document.getElementById(`cantidad-producto-personalizado-${i}`).value);
 
-            const hayDatosPersonalizados =
-                nombrePersonalizado !== '' ||
-                precioPersonalizado !== '' ||
-                cantidadPersonalizada > 0;
+                const hayDatosPersonalizados =
+                    nombrePersonalizado !== '' ||
+                    precioPersonalizado !== '' ||
+                    cantidadPersonalizada > 0;
 
-            if (hayDatosPersonalizados) {
-                if (
-                    nombrePersonalizado === '' ||
-                    precioPersonalizado === '' ||
-                    isNaN(parseFloat(precioPersonalizado)) ||
-                    parseFloat(precioPersonalizado) < 0 ||
-                    cantidadPersonalizada <= 0
-                ) {
-                    alert('Complete nombre, precio y cantidad del producto personalizado.');
-                    return;
+                if (hayDatosPersonalizados) {
+                    if (
+                        nombrePersonalizado === '' ||
+                        precioPersonalizado === '' ||
+                        isNaN(parseFloat(precioPersonalizado)) ||
+                        parseFloat(precioPersonalizado) < 0 ||
+                        cantidadPersonalizada <= 0
+                    ) {
+                        alert(`Complete nombre, precio y cantidad del producto personalizado ${i}.`);
+                        return;
+                    }
+
+                    compra.push({
+                        id: `producto-personalizado-${i}`,
+                        nombre: nombrePersonalizado,
+                        precio: parseFloat(precioPersonalizado),
+                        cantidad: cantidadPersonalizada
+                    });
                 }
-
-                compra.push({
-                    id: 'producto-personalizado',
-                    nombre: nombrePersonalizado,
-                    precio: parseFloat(precioPersonalizado),
-                    cantidad: cantidadPersonalizada
-                });
             }
 
             if (compra.length === 0) {
