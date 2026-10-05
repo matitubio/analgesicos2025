@@ -388,39 +388,39 @@
             });
              // Cards para productos personalizados
 
-function agregarProductoPersonalizado() {
-    contadorPersonalizados++;
+// function agregarProductoPersonalizado() {
+//     contadorPersonalizados++;
 
-    const numero = contadorPersonalizados;
+//     const numero = contadorPersonalizados;
 
-    const cardPersonalizado = `
-        <div class="card card-personalizado" id="card-personalizado-${numero}">
-            <h3>Producto personalizado ${numero}</h3>
+//     const cardPersonalizado = `
+//         <div class="card card-personalizado" id="card-personalizado-${numero}">
+//             <h3>Producto personalizado ${numero}</h3>
 
-            <input
-                type="text"
-                id="productoPersonalizadoNombre-${numero}"
-                placeholder="Nombre del producto"
-                style="width:100%; padding:8px; border:1px solid #ddd; border-radius:5px; font-size:14px; margin-bottom:8px;"
-            >
+//             <input
+//                 type="text"
+//                 id="productoPersonalizadoNombre-${numero}"
+//                 placeholder="Nombre del producto"
+//                 style="width:100%; padding:8px; border:1px solid #ddd; border-radius:5px; font-size:14px; margin-bottom:8px;"
+//             >
 
-            <input
-                type="number"
-                id="productoPersonalizadoPrecio-${numero}"
-                placeholder="Precio"
-                min="0"
-                style="width:100%; padding:8px; border:1px solid #ddd; border-radius:5px; font-size:14px; margin-bottom:8px;"
-            >
+//             <input
+//                 type="number"
+//                 id="productoPersonalizadoPrecio-${numero}"
+//                 placeholder="Precio"
+//                 min="0"
+//                 style="width:100%; padding:8px; border:1px solid #ddd; border-radius:5px; font-size:14px; margin-bottom:8px;"
+//             >
 
-            <select id="cantidad-producto-personalizado-${numero}">
-                <option value="0">0</option>
-                <option value="1">1</option>
-            </select>
-        </div>
-    `;
+//             <select id="cantidad-producto-personalizado-${numero}">
+//                 <option value="0">0</option>
+//                 <option value="1">1</option>
+//             </select>
+//         </div>
+//     `;
 
-    document.getElementById('productos-container').insertAdjacentHTML('beforeend', cardPersonalizado);
-}
+//     document.getElementById('productos-container').insertAdjacentHTML('beforeend', cardPersonalizado);
+// }
 
 // Crear la primera card personalizada
 agregarProductoPersonalizado();
